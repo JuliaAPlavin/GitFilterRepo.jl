@@ -3,6 +3,7 @@ module GitFilterRepo
 using Pkg.Artifacts
 using PyCall
 using Dates
+using Git_jll: git
 
 
 const gfr = PyNULL()
@@ -57,5 +58,29 @@ end
 RepoFilter(args::PyObject...; kwargs...) = gfr.RepoFilter(args...; kwargs...)
 RepoFilter(cbs::Callback...; options=FilteringOptions.default_options()) = RepoFilter(options; map(cb -> kwarg_name(cb) => cb.f, cbs)...)
 RepoFilter(func::Function, cb::Type{<:Callback}, cbs::Callback...; kwargs...) = RepoFilter(cb(func), cbs...; kwargs...)
+
+
+function clone_process_push(func::Function; source::String, destination::String, force_push::Bool=false)
+    force_arg = force_push ? `-f` : ``
+    mktempdir() do dir
+        cd(dir) do
+            @info "Cloning" source dir
+            run(`$git clone $source .`)
+            @info "Processing"
+            func()
+            @info "Adding new remote" destination
+            run(`$git remote add origin-new $destination`)
+            @info "Doing push --dry-run"
+            run(`$git push --dry-run $force_arg -u origin-new --all`)
+            r = Base.prompt("Confirm (y) that repo at $dir is ready to push to $destination")
+            if r != "y"
+                @info "Cancelled" response=r
+                return
+            end
+            @info "Pushing"
+            run(`$git push $force_arg -u origin-new --all`)
+        end
+    end
+end
 
 end
