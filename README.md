@@ -4,11 +4,13 @@ Thin Julia wrapper around https://github.com/newren/git-filter-repo (Python). Pr
 
 # Examples
 
+No additional setup is required after installation: the Python module gets automatically downloaded using the `Artifacts` system.
+
 ```julia
 import GitFilterRepo as GFR
 ```
 
-Gather all commit messages using:
+Gather all commit messages:
 
 ```julia
 # uses the raw API
@@ -19,7 +21,7 @@ rfilter.run()
 [c.message for c in commits]
 ```
 
-Set all author dates of all commits to a specific value:
+Set author dates of all commits to a specific value:
 
 ```julia
 using Dates
