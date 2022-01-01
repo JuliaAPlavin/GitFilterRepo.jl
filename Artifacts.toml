@@ -1,0 +1,7 @@
+[git-filter-repo-py]
+git-tree-sha1 = "5666b3523814b6b5fb0b8aaa4bbe2065c0ac8e26"
+lazy = false
+
+    [[git-filter-repo-py.download]]
+    url = "https://github.com/newren/git-filter-repo/archive/refs/tags/v2.29.0.tar.gz"
+    sha256 = "895bb346e23ed20d866ca40106983663a14cf738a3b6f9615bf79ded1220bdb1"
