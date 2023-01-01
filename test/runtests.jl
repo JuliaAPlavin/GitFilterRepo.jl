@@ -41,5 +41,5 @@ CHL.@check()
         dt = GFR.string_to_date(commit.committer_date)
         commit.author_date = GFR.date_to_string(trunc(dt, Year))
     end.run()
-    @test readlines(`$git log --format="%aI %s"`) == ["2021-01-01T00:00:00+00:00 second commit", "2021-01-01T00:00:00+00:00 first commit"]
+    @test readlines(`$git log --format="%aI %s"`) == ["2022-01-01T00:00:00+00:00 second commit", "2022-01-01T00:00:00+00:00 first commit"]
 end
