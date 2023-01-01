@@ -1,7 +1,7 @@
 name = "GitFilterRepo"
 uuid = "72c675ce-d821-4fa1-bc7b-baba4c7e6388"
 authors = ["Alexander Plavin <alexander@plav.in>"]
-version = "0.1.0"
+version = "0.1.1"
 
 [deps]
 Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
