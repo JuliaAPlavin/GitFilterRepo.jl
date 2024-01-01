@@ -60,7 +60,7 @@ RepoFilter(cbs::Callback...; options=FilteringOptions.default_options()) = RepoF
 RepoFilter(func::Function, cb::Type{<:Callback}, cbs::Callback...; kwargs...) = RepoFilter(cb(func), cbs...; kwargs...)
 
 
-function clone_process_push(func::Function; source::String, destination::String, force_push::Bool=false)
+function clone_process_push(func::Function; source::String, destination::String, force_push::Bool=false, y::Bool=false)
     force_arg = force_push ? `-f` : ``
     mktempdir() do dir
         cd(dir) do
@@ -72,10 +72,12 @@ function clone_process_push(func::Function; source::String, destination::String,
             run(`$git remote add origin-new $destination`)
             @info "Doing push --dry-run"
             run(`$git push --dry-run $force_arg -u origin-new --all`)
-            r = Base.prompt("Confirm (y) that repo at $dir is ready to push to $destination")
-            if r != "y"
-                @info "Cancelled" response=r
-                return
+            if !y
+                r = Base.prompt("Confirm (y) that repo at $dir is ready to push to $destination")
+                if r != "y"
+                    @info "Cancelled" response=r
+                    return
+                end
             end
             @info "Pushing"
             run(`$git push $force_arg -u origin-new --all`)
